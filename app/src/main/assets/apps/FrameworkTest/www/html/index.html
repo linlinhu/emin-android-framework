@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	</head>
+	<link rel="stylesheet" href="../css/mui.min.css" type="text/css" charset="UTF-8"/>
+	<style>
+		
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">Test Item</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li data-url="html/okhttp_web.html" class="mui-table-view-cell">
+					<span class="mui-navigate-right" >okhttpRequest</span>
+				</li>
+				<li data-url="html/orm_web.html" class="mui-table-view-cell">
+					<span class="mui-navigate-right">web orm</span>
+				</li>
+				<li data-url="html/location.html" class="mui-table-view-cell" >
+					<span class="mui-navigate-right">location</span>
+				</li>
+				<li data-url="html/template_test.html" class="mui-table-view-cell" >
+					<span class="mui-navigate-right">template</span>
+				</li>
+				<li data-url = "html/framework7/index.html" class="mui-table-view-cell">
+					<span class="mui-navigate-right">Framwork7</span>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="../libs/mui/mui.min.js"></script>
+	<script src="../js/plugin/pluginOkHttpRequest.js"></script>
+	<script src="../js/common/page_control.js"></script>
+	<script>
+		mui(".mui-table-view").on('tap','li',function() {
+			var url = this.dataset.url
+//			if(url == 'html/framework7/index.html') {
+//				anonymousTest();
+//				return;
+//			}
+			pager.openWindow({url: url,id: url});
+		});
+		
+		/* 匿名函数测试 */
+		function anonymousTest() {
+			var url = 'http://192.168.0.202:8881/api-user/';
+			EminBridge.ohr.request({
+				url:url,
+				path:'clientLogin',
+				data:{
+					username:'admin',
+					password:'21218cca77804d2ba1922c33e0151105'
+				},
+				type:'post',
+				success: function(result) {
+					console.log('=== login result:' + JSON.stringify(result));
+					if(result.success) {
+						mui.toast('登录成功');
+						localStorage.isLogin =  true;
+						localStorage.userName = result.data.username;
+						localStorage.token = result.data.token;
+					} else {
+						mui.alert(result.message);
+					}
+				},
+				error:function() {
+					alert('error');
+				}
+			});
+		}
+		
+	</script>
+</html>

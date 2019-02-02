@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>模板测试</title>
+		<link rel="stylesheet" href="../css/mui.min.css" type="text/css" charset="utf-8" />
+		<style>
+			.buttons {
+				margin-top: 10px;
+				margin-left: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">模板测试</h1>
+		</header>
+		
+		<div class="mui-content">
+			<div class="buttons">
+				<button id="btnSync" class="mui-btn-green">模板同步</button>
+				<button id='btnRefresh' class="mui-btn-mini">界面刷新</button>
+				<button id="btnSubmit" class="mui-btn-danger">数据提交</button>
+			</div>
+			<div id="content"></div>
+		</div>
+	</body>
+	<script src="../libs/mui/mui.min.js"></script>
+	<script src="../libs/artTemplate/template-web.js"></script>
+	<script src="../js/plugin/pluginOrm.js"></script>
+	<script src="../js/plugin/pluginOkHttpRequest.js"></script>
+	<script src="../js/model/BaseEntity.js"></script>
+	<script src="../js/model/Template.js"></script>
+	<script src="../js/model/SyncRecord.js"></script>
+	<script src="../js/common/common.js"></script>
+	<script src="../js/template_test.js"></script>
+	
+	<script id="test" type="text/html">
+		<%include('navi')%>
+	</script>
+	
+	
+	<script id="navi" type="text/html">
+		{{ each groups group i }}
+			group: {{group.name}}
+			<br />
+			{{ each group.items item j }}
+				{{ if item.type == 1 }}
+					<label> {{item.title}}</label>
+					<input id="{{item.itemToken}}" class="mui-input-row formItem" type="text" placeholder="{{item.value}} "/>
+				{{/if}}
+				
+				{{ if item.type == 2 }}
+					<label> {{item.title}}</label>
+					<textarea id="{{item.itemToken}}" rows="2" class="formItem" placeholder="多行文本"></textarea>
+				{{/if}}
+				
+				{{ if item.type == 6 }}
+					<label> {{item.title}}</label>
+					<input id="{{item.itemToken}}" class="mui-input-row formItem" type="number" placeholder="{{item.value}} "/>
+				{{/if}}
+				
+				{{ if item.type == 7 }}
+					<label> {{item.title}}</label>
+					<input id="{{item.itemToken}}" class="mui-input-row formItem" type="time" placeholder="{{item.value}} "/>
+				{{/if}}
+				
+				{{ if item.type == 8 }}
+					<label> {{item.title}}</label>
+					<input id="{{item.itemToken}}" class="mui-input-row formItem" type="date" placeholder="{{item.value}} "/>
+				{{/if}}
+				
+			{{/each}}
+		{{/each}}
+		
+	</script>
+	
+	<!--<script id="navi" type="text/html">
+		<ul>
+		    <% for (var i = 0; i < list.length; i ++) { %>
+		        <li><%= i + 1 %> ：<%= list[i] %></li>
+		    <% } %>
+		</ul>
+	</script>
+
+	<script>
+		var data = {
+			title:'测试',
+			list: ['文艺', '博客', '摄影', '电影', '民谣', '旅行', '吉他']
+		};
+		var html = template('test', data);
+		document.getElementById('content').innerHTML = html;
+	</script>-->
+</html>

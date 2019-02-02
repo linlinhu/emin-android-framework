@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.emin.digit.mobile.android.meris">
+
+    <!-- Camera 权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name = "android.hardware.camera" />
+    <uses-feature android:name = "android.hardware.camera.autofocus" />
+
+    <!-- 存储权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+    <!-- GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <!-- 电话/短信 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- 主Activity -->
+        <activity android:name=".platform.core.EMHybridActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
+            android:theme="@style/Theme.Start">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 系统服务 -->
+        <service android:name=".service.CoreService" android:process=":remote">
+            <intent-filter>
+                <action android:name="com.emin.digit.mobile.android.meris.service.IMyAidlInterface" />
+            </intent-filter>
+        </service>
+
+        <!-- MQTT 推送服务 -->
+        <service android:name=".service.push.PushServiceMqtt"
+            android:exported="false"
+            android:persistent="true"
+            android:process=":pushNotify"
+            android:label="Meris Push Notifications Service">
+            <intent-filter>
+                <action android:name="com.emin.digit.mobile.android.meris.service.push.PushServiceMqtt" />
+            </intent-filter>
+        </service>
+
+        <!-- 网络监听器 -->
+        <receiver android:name=".platform.components.net.NetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 任务监听器 -->
+        <receiver android:name=".platform.components.job.JobManager$JobReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="JobEngine" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 测试 -->
+        <service android:name=".service.push.EMPushService" android:process=":remote" android:exported="false">
+            <intent-filter>
+                <action android:name="com.emin.digit.mobile.android.meris.service.IMyAidlInterface" />
+            </intent-filter>
+        </service>
+
+        <!--<service android:name=".service.EMPushService" android:process=":remote">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.emin.digit.mobile.android.meris.service.push.EMPushService" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
+    </application>
+
+</manifest>

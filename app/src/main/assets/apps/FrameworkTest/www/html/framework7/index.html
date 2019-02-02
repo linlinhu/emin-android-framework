@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!-- Required meta tags-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Color theme for statusbar -->
+		<meta name="theme-color" content="#2196f3">
+		<!-- Your app title -->
+		<title>My App</title>
+		<!-- Path to Framework7 Library CSS, Material Theme -->
+		<link rel="stylesheet" href="../../libs/framework7/css/framework7.material.min.css" />
+		<!-- Path to Framework7 color related styles, Material Theme -->
+		<link rel="stylesheet" href="../../libs/framework7/css/framework7.material.colors.min.css">
+		<!-- Path to your custom app styles-->
+		<link rel="stylesheet" href="../../libs/framework7/css/my-app.css" />
+	</head>
+
+	<body>
+		<!-- Views -->
+		<div class="views">
+			<!-- Your main view, should have "view-main" class -->
+			<div class="view view-main">
+				<!-- Pages container, because we use fixed navbar and toolbar, it has additional appropriate classes-->
+				<div class="pages navbar-fixed">
+					<!-- Page, "data-page" contains page name -->
+					<div data-page="index" class="page">
+						<!-- Top Navbar. In Material theme it should be inside of the page-->
+						<div class="navbar">
+							<div class="navbar-inner">
+								<div class="center">Awesome App</div>
+							</div>
+						</div>
+
+						<!-- Scrollable page content -->
+						<div class="page-content">
+							<div class="content-block-title">Framework7 UI集成测试</div>
+							<div class="list-block">
+								<ul>
+									<li data-url="html/framework7/alert.html" class="item-link">
+										<div class="item-content">
+											<div class="item-inner">
+												<div class="item-title">弹窗</div>
+											</div>
+										</div>
+									</li>
+									<li class="item-link">
+										<div class="item-content">
+											<div class="item-inner">
+												<div class="item-title">Form</div>
+											</div>
+										</div>
+									</li>
+
+									<li class="item-link">
+										<div class="item-content">
+											<div class="item-inner">
+												<div class="item-title">About</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+
+							<div class="content-block-title">Layout</div>
+							<div class="list-block">
+								<ul>
+									<li class="item-content">
+										<div class="item-media"><i class="icon icon-f7"></i></div>
+										<div class="item-inner">
+											<div class="item-title">Item title</div>
+											<div class="item-after">Label</div>
+										</div>
+									</li>
+									<li class="item-content">
+										<div class="item-media"><i class="icon icon-f7"></i></div>
+										<div class="item-inner">
+											<div class="item-title">Item with badge</div>
+											<div class="item-after"><span class="badge">5</span></div>
+										</div>
+									</li>
+									<li class="item-content">
+										<div class="item-media"><i class="icon icon-f7"></i></div>
+										<div class="item-inner">
+											<div class="item-title">Another item</div>
+											<div class="item-after">Another label</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- Path to Framework7 Library JS-->
+	<script src="../../libs/framework7/js/framework7.min.js"></script>
+	<!-- Path to your app js-->
+	<script src="../../libs/framework7/js/my-app.js"></script>
+	<script src="../../js/common/page_control.js"></script>
+	<script>
+		$$('.item-link').on('click', function() {
+			var url = this.dataset.url;
+			pager.openWindow({
+				url:url,
+				id:url
+			})
+		})
+	</script>
+
+</html>

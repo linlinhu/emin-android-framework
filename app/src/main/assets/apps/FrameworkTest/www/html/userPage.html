@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Home Page</title>
+    <script type="text/javascript" charset="utf-8" src="../js/basePlugin.js"></script>
+    <script type="text/javascript">
+
+         // 测试跳转后的页面,对注入的EminBridge的可用性
+         function getLocation(){
+            var result = EminBridge.GPSPlugin.getLocation("成都");
+            alert(result);
+         }
+
+         // 测试返回上一页,使用EminBridge的方法以便可以管理WebView的生命周期等
+         function back(){
+            EminBridge.backWebPage();
+         }
+
+         // 睡眠,测试加载进度等
+         function sleep(numberMillis) {
+             var now = new Date();
+             var exitTime = now.getTime() + numberMillis;
+             while (true) {
+                now = new Date();
+                if (now.getTime() > exitTime)
+                    break;
+             }
+         }
+
+/*
+(function(){
+         console.log(1111);
+
+         sleep(2000);
+
+         console.log(2222);
+
+         sleep(8000);
+
+         console.log(3333);
+})();
+*/
+    </script>
+</head>
+<body>
+<button type="button" onclick="back()">返回</button>
+<br/>
+<br/>
+
+<button type="button" onclick="getLocation()">获取当前位置</button>
+<br/>
+<br/>
+
+</body>
+</html>

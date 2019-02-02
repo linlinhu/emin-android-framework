@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../css/mui.min.css" type="text/css" charset="utf-8" />
+		<style>
+			
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">定位</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-card">
+				<div class="mui-card-header">Location info</div>
+				<div class="mui-card-content">
+					<div class="mui-card-content-inner">
+						<label>Provider:</label>
+						<label id="provider">GPS</label>
+					</div>
+					<div class="mui-card-content-inner">
+						<label>Longitude:</label>
+						<label id="longitude">104.05899467</label>
+					</div>
+					<div class="mui-card-content-inner">
+						<label>Latitude:</label>
+						<label id="latitude">30.54617767</label>
+					</div>
+					<div class="mui-card-content-inner">
+						<label>Accuracy:</label>
+						<label id="accuracy">55</label>
+					</div>
+					<div class="mui-card-content-inner">
+						<label>located Time:</label>
+						<label id="locatedTime">1510300194000</label>
+					</div>
+				</div>
+				<div class="mui-card-footer">
+					<button id="btnSingle" class="mui-btn-link">single</button>
+					<button id="btnStartListen" class="mui-btn-link">listen</button>
+					<button id="btnStopListen" class="mui-btn-link">stop</button>
+					<div>
+						<label id="startTime">clicked Time</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../libs/mui/mui.min.js"></script>
+	<script src="../js/common/common.js"></script>
+	<script src="../js/plugin/pluginLocation.js"></script>
+	<script src="../js/prototype/DatePrototype.js"></script>
+	<script src="../js/location.js"></script>
+</html>

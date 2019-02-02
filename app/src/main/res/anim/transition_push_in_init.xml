@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+    解决如果先push一个无界面的html,比如init.html;
+    fromXDelta="100%" duration="250" 会白屏闪一下;
+    另外,将这两个参数放大4倍,保证视觉上速度不变
+    -->
+    <translate
+        android:fromXDelta="400%"
+        android:toXDelta="0%"
+        android:duration="1000">
+    </translate>
+</set>

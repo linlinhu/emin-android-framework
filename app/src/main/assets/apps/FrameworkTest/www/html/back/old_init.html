@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Init</title>
+    <!--<script type="text/javascript" charset="utf-8" src="../js/basePlugin.js"></script>-->
+    <script>
+
+        //if(window.EminBridge){
+        //}else{
+        //    document.addEventListener('EminBridgeReady',function(){},false);
+        //}
+
+         var debug = false;
+         var fn_callback = function(){};
+
+         // 测试传参数调用
+         function insertData(){
+            EminBridge.dbPlugin.insert("insert into t_user values(1,'a')");
+         }
+
+         // 测试无参数调用
+         function startGps(){
+            EminBridge.GPSPlugin.startGPS();
+         }
+
+         function getLocation(){
+            var start =new Date().getTime();
+            var result = EminBridge.GPSPlugin.getLocation("成都");
+            var end = new Date().getTime();
+            console.log("执行plugin消耗时间:" + (end - start));
+            alert(result);
+         }
+
+         // 测试弹框类
+         function toast(){
+            EminBridge.UIAlert.toast("This is a toast message!");
+         }
+
+         // 测试二维码扫描
+         function startBarcode(){
+            EminBridge.barcode.start("barcode 2D");
+         }
+
+         // 回调测试
+         function testCallback(){
+            var type = "barcode";
+            EminBridge.barcode.testCallback(type,function(result){
+                    alert("回调函数执行,原生层处理结果:" + result);
+                 });
+         }
+
+         // 测试,在原生层通过webView的loadUrl("javascript:functionInJs()")调用该方法的可行性 OK
+         function functionInJs(){
+            alert("Function in JavaScript called");
+         }
+
+         // 页面跳转测试
+         function toUserPage(){
+            console.log("Will go to user page");
+            //var remoteUrl = 'http://developer.android.com/';
+            //window.location.href=url;
+
+            var localRelativeUrl = 'userPage.html';
+            //window.location.href=localRelativeUrl; // 原生JS中的相对路劲跳转可行
+
+            //var localFullUrl = 'file:///android_asset/apps/test/www/html/userPage.html'
+            EminBridge.loadWebPage(localRelativeUrl);  // 采用EminBridge封装的方法,如果用相对路劲,需要在框架中拼接完整
+         }
+
+         // = = = = = = = = = = = 辅助测试方法
+         function printChildren(obj){
+            if(debug){
+                for(var o in obj){
+                    console.log(o);
+                }
+            }
+         }
+
+         function calculateTimeMills(){
+            var start =new Date().getTime();
+
+            // function invoke
+
+            var end = new Date().getTime();
+
+            console.log("时间差:" + (end - start));
+
+         }
+         
+         
+         // = = = = = = = = = = = 测试RxJava + OkHttp并发请求
+         function toOkHTTP() {
+         	var options = {
+         		url:"okHttp.html",
+         		id:"okHttp"
+         	};
+         	EminBridge.openWindow(JSON.stringify(options));
+         }
+      </script>
+
+</head>
+
+<body>
+<button type="button" id="button1" onclick="insertData()">数据库插件:插入数据</button>
+<br/>
+<br/>
+<button type="button" id="button2" onclick="startGps()">GPS插件:开启GPS</button>
+<br/>
+<br/>
+<button type="button" id="button3" onclick="getLocation()">测试返回值:获取当前位置</button>
+<br/>
+<br/>
+<button type="button" id="btnCallback" onclick="testCallback()">测试JS回调</button>
+
+<br/>
+<br/>
+<button type="button" id="btnToast" onclick="toast()">测试调用原生的提示toast</button>
+
+<br/>
+<br/>
+<button type="button" id="btnBarcode" onclick="startBarcode()">测试二维码扫描</button>
+<br/>
+<br/>
+<button type="button" id="btnToUser" onclick="toUserPage()">用户界面</button>
+
+<button type="button" id="btnOkHttp" onclick="toOkHTTP()">测试RxJava_OkHttp</button>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+{
+	"id": "erdm-app",
+	"name": "web app",
+	"version": {
+		"name": "1.0.0",
+		"code": "1"
+	},
+	"description": "",
+	"source_path": "",
+	"launch_path": "init.html"
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<title>登录页面</title>
+		<style>
+			body {
+				height: 100vh;
+				width: 100vw;
+				padding: 0;
+				margin: 0;
+				background-image: url('../images/Sign_in.png');
+				background-size: 100% 100%;
+				background-repeat: no-repeat;
+				padding-right: 15px;
+			}
+			
+			.input_box {
+				position: absolute;
+				width: 90%;
+				margin: 5%;
+				top: 30%;
+			}
+			
+			h5 {
+				margin-top: 5%;
+				color: #fff;
+			}
+			
+			#btnLogin {
+				width: 100%;
+				background: #FFBE34;
+				border: 1px solid #FFBE34;
+				line-height: 30px;
+				font-weight: bold;
+				-webkit-user-modify: read-write-plaintext-only;
+			}
+			
+			.mui-content {
+				background: transparent;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h5 class="mui-pull-right">新用户注册</h5>
+		<div class="mui-content">
+			<div class="input_box mui-card" style="border-radius:4px;">
+				<form class="mui-input-group mui-card-content">
+					<div class="mui-input-row" style="background: transparent;">
+						<input id="username" type="text" placeholder="账号">
+					</div>
+					<div class="mui-input-row">
+						<input id="password" type="password" placeholder="密码">
+					</div>
+					<div class="mui-input-row">
+						<input id="code"  type="text" placeholder="验证码" style="width: 50%;">
+						<img class="mui-pull-right" style="margin:5px 5px 5px auto;" src="http://192.168.0.202:8881/api-user/common/get_img" />
+					</div>
+				</form>
+			</div>
+			<div class="input_box" style="border-radius:4px;top:65% ;">
+				<input id="btnLogin" type="submit" value="登录" />
+			</div>
+		</div>
+		<script src="../libs/mui/mui.min.js"></script>
+		<script src="../libs/md5.js"></script>
+		<script src="../js/common/common.js"></script>
+		<script src="../js/common/page_control.js"></script>
+		<script src="../js/plugin/pluginOkHttpRequest.js"></script>
+		<script>
+			var basePath = 'http://192.168.0.37:8080/platformGUI/';
+			var nodes = document.querySelectorAll(".mui-input-group input")
+			for(var i = 0; i < nodes.length; i++) {
+				nodes[i].onfocus = function() {
+					document.body.scrollTop = document.body.scrollHeight
+				}
+			};
+
+			//检验localStorage用户信息是否存在,如果存在，则自动登录
+			/*mui.ready(function(){
+			    var _username=localStorage.username;
+			    var _password=localStorage.username;
+			    if(_username.length>0 && _password.length>0){
+			            login(_username, _password);
+			    }else{
+			        return;
+			    }
+			})*/
+
+			//login按钮事件
+			document.getElementById("btnLogin").addEventListener('tap', function() {
+				var userName = document.getElementById("username").value.trim();
+				var pwd = document.getElementById("password").value.trim();
+				if(userName.length <= 0 || pwd <= 0) {
+					mui.alert('请正确输入用户名和密码');
+					return;
+				}
+				login(userName, md5(pwd));
+			});
+			
+			
+			
+			//输入法键盘enter事件
+			document.onkeydown = function(event) {
+				var e = event || window.event || arguments.callee.caller.arguments[0];
+				if(e && e.keyCode == 13) { //键盘enter键输入
+					alert('keyboard keydown event.');
+				}
+			};
+			
+			/**
+			 * 登录
+			 * 
+			 * @param {Object} userName admin
+			 * @param {Object} pwd 888888->21218cca77804d2ba1922c33e0151105
+			 */
+			function login(userName, pwd) {
+				console.log('=== userName:' + userName + ' password:' + pwd);
+				var url = 'http://192.168.0.202:8881/api-user/';
+				EminBridge.ohr.request({
+					url:url,
+					path:'clientLogin',
+					data:{
+						username:userName,
+						password:pwd
+					},
+					type:'post',
+					success: function(result) {
+						alert(JSON.stringify(result));
+						if(result.success) {
+							mui.toast('登录成功');
+							localStorage.isLogin =  true;
+							localStorage.userName = result.data.username;
+							localStorage.token = result.data.token;
+							pager.openWindow({
+								url: 'html/index.html',
+								id: 'index'
+							})
+						} else {
+							mui.alert(result.message);
+						}
+					},
+					error:function() {
+						alert('error:');
+					}
+				});
+			}
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css" type="text/css" charset="utf-8"/>
+		<style>
+			.output {
+				width:98%;
+				margin: 10px 0;
+			}
+			
+			.input-short {
+				width: 10%;
+			}
+			
+			.input-medium {
+				width: 20%;
+			}
+			
+			.input-large {
+				width: 30%;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">前端ORM数据库操作</h1>
+		</header>
+		<div class="mui-content">
+			
+			
+			
+			<span>---------- 原生sql执行 ----------</span>
+			<textarea id="txtSql" class="output" rows="2" placeholder="输入sql语句"></textarea>
+			<button id="btnSqlSearch" type="button" onclick="sqlSearch()">sql语句查询</button>
+			<button id="btnSqlExec" type="button" onclick="sqlExec()">sql语句执行</button>
+			<textarea id="txtSqlOupt" class="output" rows="4" placeholder="sql语句查询/执行结果" disabled="true"></textarea>
+			
+			<span>---------- orm查询 ----------</span><br />
+			<input id="userId" class="input-short" placeholder="id"/>
+			<input id="userName" class="input-medium" placeholder="姓名"/>
+			<input id="userAge" class="input-short" placeholder="年龄"/>
+			<input id="userPhone" class="input-large" placeholder="手机号"/>
+			<button id="btnSearch" type="button" onclick="search()">orm查询</button><br />
+			
+			
+			<span>---------- orm新增  -----------</span><br />
+			<input id="newName" class="input-medium" placeholder="姓名" />
+			<input id="newAge" class="input-short" placeholder="年龄" />
+			<input id="newPhone" class="input-large" placeholder="手机号"/>
+			<button id="btnAdd" type="button" onclick="add()">orm新增确定</button><br />
+			
+			<!--<button id="btnAdd" type="button" onclick="addBatch()">批量新增</button><br />-->
+			<span>---------- orm删除 ----------</span>
+			<input id="delId" class="input-short" placeholder="id"/>
+			<button id="btnDel" type="button" onclick="del()">orm删除</button><br />
+			
+			<span>---------- orm更新 ----------</span><br />
+			<input id="updateId" class="input-short" placeholder="id"/>
+			<input id="updateName" class="input-medium"  placeholder="姓名" />
+			<input id="updateAge" class="input-short" placeholder="年龄" />
+			<input id="updatePhone" class="input-large" placeholder="手机号"/><br />
+			<button id="btnSearchForUpd" type="button" onclick="searchForUpdate()">orm更新前查询</button>
+			<button id="btnUpdate" type="button" onclick="update()">orm更新</button><br />
+			<textarea id="txtOrmOupt" class="output" rows="5" placeholder="orm操作执行结果" disabled="true"></textarea>
+			
+			<span>orm建表 :</span>
+			<button id="btnCreate" type="button" onclick="ormCreateTable()">orm建表</button>
+			
+			<span> | 删除表 </span>
+			<button id="btnDrop" type="button" onclick="dropTable()">删除表</button>
+		</div>
+		
+	</body>
+	<script src="../libs/mui/mui.min.js"></script>
+	<script src="../js/plugin/pluginOrm.js"></script>
+	<script src="../js/model/BaseEntity.js"></script>
+	<script src="../js/model/User.js"></script>
+	<script src="../js/model/Account.js"></script>
+	<script src="../js/model/Product.js"></script>
+	<script src="../js/model/Agent.js"></script>
+	<script>
+		
+		mui.init();
+		mui.back = function() {
+			EminBridge.back();
+		}
+		
+		// orm新增
+		function add() {
+			var user = new User();
+			user.name = item('newName').value.trim();
+			user.age = item('newAge').value.trim();
+			user.phone = item('newPhone').value.trim();
+			EminBridge.orm.add(user);
+		}
+		
+		// orm删除
+		function del() {
+			var user = new User();
+			user.id = item('delId').value.trim();
+			var result = EminBridge.orm.remove(user);
+			item('txtOrmOupt').value = result;
+		}
+		
+		// orm更新
+		var oldUser = null;
+		function update() {
+			oldUser.name = item('updateName').value.trim();
+			oldUser.age = item('updateAge').value.trim();
+			oldUser.phone = item('updatePhone').value.trim();
+			item('txtOrmOupt').value = EminBridge.orm.update(oldUser);
+			//item('updateId').disabled = false;
+		}
+		
+		function searchForUpdate() {
+			// 先查询一个用户信息
+			var user = new User();
+			user.id = item('updateId').value.trim();
+			user.name = item('updateName').value.trim();
+			user.age = item('updateAge').value.trim();
+			user.phone = item('updatePhone').value.trim();
+			var result = JSON.parse(EminBridge.orm.search(user));
+			if(result.length == 0) {
+				return;
+			}
+			oldUser = result[0];
+			item('updateId').value = oldUser.id;
+			item('updateName').value = oldUser.name;
+			item('updateAge').value = oldUser.age;
+			item('updatePhone').value = oldUser.phone;
+			oldUser['tableName'] = user.tableName;
+			alert(JSON.stringify(oldUser));
+			//item('updateId').disabled = true;
+		}
+		
+		// orm查询
+		function search() {
+			var user = new User();
+			user.id = item('userId').value.trim();
+			user.name = item('userName').value.trim();
+			user.age = item('userAge').value.trim();
+			user.phone = item('userPhone').value.trim();
+			var result = EminBridge.orm.search(user);
+			item('txtOrmOupt').value = result;
+		}
+		
+		// orm建表
+		function ormCreateTable() {
+			//var product = new Product();
+			var table = new Agent();
+			var result = EminBridge.orm.createTable(table);
+		}
+		
+		function dropTable() {
+			var tableName = 'agent';
+			var result = EminBridge.orm.dropTable(table);
+		}
+		
+		// sql语句查询
+		function sqlSearch() {
+			var sql = item('txtSql').value.trim();
+			var result = EminBridge.orm.query(sql);
+			item('txtSqlOupt').value = result;
+		}
+		
+		// sql语句执行
+		function sqlExec() {
+			var sql = item('txtSql').value.trim();
+			var result = EminBridge.orm.execSql(sql);
+			item('txtSqlOupt').value = result;
+		}
+		
+		function item(id) {
+			return document.getElementById(id)
+		}
+		
+		function isEmpty(val) {
+			if(val == null || val == '' || val.toLowerCase() == 'null' ) {
+				return true;
+			}
+			return false;
+		}
+		
+	</script>
+</html>

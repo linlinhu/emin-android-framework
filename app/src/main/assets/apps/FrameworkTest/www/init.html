@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		
+		<script src="js/plugin/pluginOrm.js"></script>
+		<script src="js/model/BaseEntity.js"></script>
+		<script src="js/model/Template.js"></script>
+		<script src="js/model/SyncRecord.js"></script>
+		<script src="js/common/page_control.js"></script>
+		<script>
+			
+			(function() {
+				// 数据库相关初始化
+				console.log('===localStorage.dbInit:' + localStorage.dbInit);
+				if(!localStorage.dbInit) {
+					initDb();
+				}
+				// 登录检查
+				console.log('===localStorage.isLogin:' + localStorage.isLogin);
+				if(localStorage.isLogin) {
+					pager.toIndexPage();
+				} else {
+					pager.toLoginPage();
+				}
+			}());
+			
+			
+			function initDb() {
+				console.log('==== init database..');
+				EminBridge.orm.createDatabase('meris.db'); // 数据库相关
+				EminBridge.orm.createTable(new SyncRecord()); // 创建同步记录表
+				EminBridge.orm.createTable(new Template()); // 创建Template表
+				
+				initDbData();
+				localStorage.dbInit = true;
+			}
+			
+			function initDbData() {
+				var syncRecord = new SyncRecord();
+				syncRecord.id = 1;
+				syncRecord.code = 100;
+				syncRecord.name = 'template';
+				syncRecord.url = 'http://192.168.0.223:8205/dataModel/';
+				syncRecord.path = 'getUpdates';
+				syncRecord.lastSyncTime = 0;
+				EminBridge.orm.save(syncRecord);
+			}
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

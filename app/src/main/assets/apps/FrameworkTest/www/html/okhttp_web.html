@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	</head>
+	<style>
+	</style>
+	<body>
+		
+		<p>RxJava + Retrofit + OkHttp Testing</p>
+		<p>-----------------------Get----------------------</p>
+		<input id="city" type="text" placeholder="city or code"/>
+		<button onclick="getCity()">city search</button>
+		<button onclick="getCityCancel()">cancel</button>
+		<br />
+		<input id="lang" type="text" placeholder="lang" value="zh-cn"/><br />
+		<input id="cityCode" type="text" placeholder="city code" value="CN101010100"/>
+		<button onclick="getNowWeather()">now weather</button>
+		<button onclick="getNowWeatherCancel()">cancel</button>
+		<br />
+		
+		<p>---------------------Post---------------------------</p>
+		<label>CBA球队赛事信息</label><br />
+		<button onclick="getCbaInfo()">查询CBA球队赛事</button>
+		<p>灵活配置测试</p>
+		
+	</body>
+	<script src="../js/plugin/pluginOkHttpRequest.js"></script>
+	<script>
+		// ------------ get
+		
+		function getCity() {
+			var baseUrl = "https://free-api.heweather.com/v5/";
+			var city = document.getElementById('city').value.trim();
+			var data = {
+				city:city,
+				key:"2600eec475b7415997dfa890a4cad497"
+			};
+			var path = "search";
+//			EminBridge.ohr.get(baseUrl, path, data, "success");
+			
+			EminBridge.ohr.send({
+				url:baseUrl,
+				path:path,
+				type:'get',
+				data:{},
+				success:'success',
+				error:'error'
+			});
+			
+		}
+		
+		function getCityCancel() {
+			EminBridge.ohr.cancel();
+		}
+		
+		function getNowWeather() {
+			var baseUrl = "https://free-api.heweather.com/v5/";
+			var cityCode = document.getElementById('cityCode').value.trim();
+			var lang = document.getElementById('lang').value.trim();
+			var data = {
+				city:cityCode,
+				key:"2600eec475b7415997dfa890a4cad497",
+				lang:lang
+			};
+			var path = "now";
+			EminBridge.ohr.get(baseUrl, path, data, "success");
+		}
+		
+		function getNowWeatherCancel() {
+			EminBridge.ohr.cancel();
+		}
+		
+		// ------------ Post
+		function getCbaInfo() {
+			var baseUrl = "http://v.juhe.cn/";
+			var data = {
+				key:"26daf96b275629c71c37db6fc80e3a95"
+			};
+			var path = "cba/teamList.php";
+			EminBridge.ohr.post(baseUrl, path, data, "success");
+		}
+		
+		function success(result) {
+			alert('success callback:' + result);
+			console.log("==== response:" + result);
+		}
+		
+		function error(e) {
+			alert('error callback:' + JSON.stringify(e));
+		}
+		
+	</script>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Home Page</title>
+    <script type="text/javascript" src="js/pluginDb.js"></script>
+</head>
+<body>
+
+<button type="button">订单<span id="order">0</span></button>
+<br/>
+<br/>
+
+<button type="button" onclick="readNotPaid()">未付款订单(点击读取测试)<span id="notPaid">0</span></button>
+<br/>
+<br/>
+
+<button type="button" onclick="readDelivery()">配送中订单(点击读取测试)<span id="delivery">0</span></button>
+<br/>
+<br/>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<button type="button" onclick="messageNotPaidCome()">模拟未付款订单消息进来</button>
+<br/>
+<br/>
+
+<button type="button" onclick="messageDeliveryCome()">模拟未配送订单消息进来</button>
+<br/>
+<br/>
+
+<button type="button" onclick="back()">返回</button>
+<br/>
+<br/>
+
+</body>
+    <script type="text/javascript">
+
+        var itemOrder;    // 显示订单红点的元素
+        var itemNotPaid;  // 显示订单中的未付款订单红点的元素
+        var itemDelivery; // 显示订单中的正在配送的订单红点的元素
+
+        // 注册红点服务-注册时,把回调的方法名传递过去
+        (function registerReddotService(){
+            console.log("110 Reddot service init..");
+
+            itemOrder = document.getElementById("order");
+            itemNotPaid = document.getElementById("notPaid");
+            itemDelivery = document.getElementById("delivery");
+
+            // var callback = "registerDone"; // 有回调,注册成功后再更新红点
+            // EminBridge.reddotRegister(callback);
+
+            EminBridge.reddotRegister("receiveReddot1");
+            updateReddot();
+        }());
+
+        // 初始化时的注册成功,更新界面红点数量
+        function registerDone(result){
+            console.log("112 registerDone");
+            updateReddot();
+        }
+
+        // 收到新消息,更新界面红点数量
+        function receiveReddot1(){
+            console.log("222!!!! receiveReddot");
+            updateReddot();
+        }
+
+        // 执行dbPlugin查询红点数据,以做红点更新
+        function updateReddot(){
+            console.log("111 updateReddot");
+            // 在数据库中查询该页面需要显示红点的元素的红点数量
+            var countOrder = EminBridge.pluginDb.queryWithSql("select number from reddotRecord where itemid='order' and pageid='reddot.html'");
+            var countNotPaid = EminBridge.pluginDb.queryWithSql("select number from reddotRecord where itemid='notPaid' and pageid='reddot.html'");
+            var countDelivery = EminBridge.pluginDb.queryWithSql("select number from reddotRecord where itemid='delivery' and pageid='reddot.html'");
+            itemOrder.innerHTML    = JSON.parse(countOrder)[0].number;
+            itemNotPaid.innerHTML  = JSON.parse(countNotPaid)[0].number;
+            itemDelivery.innerHTML = JSON.parse(countDelivery)[0].number;
+        }
+
+        // 模拟有未付款订单消息推送过来-原生层执行消息插入数据库操作
+        function messageNotPaidCome(){
+            console.log("221 messageNotPaidCome");
+            var msg = {
+                templateid:1,
+                pageid:'reddot.html',
+                itemid:'notPaid',
+                status:'unread'
+            };
+            EminBridge.unreadMessageComing(JSON.stringify(msg));
+        }
+
+        //模拟有配送订单消息推送过来-原生层执行消息插入数据库操作
+        function messageDeliveryCome(){
+            console.log("222 messageDeliveryCome");
+            var msg = {
+                templateid:1,
+                pageid:'reddot.html',
+                itemid:'delivery',
+                status:'unread'
+            };
+            EminBridge.unreadMessageComing(JSON.stringify(msg));
+        }
+
+        // 模拟读取新消息,原生层通过算法计算红点数量,并更新数据库,以供查询更新界面
+        // 模拟读取未付款订单消息
+        function readNotPaid(){
+           console.log("js readNotPaid");
+           var msg = {
+                templateid:1,
+                pageid:'reddot.html',
+                itemid:'notPaid',
+                status:'read'
+            };
+            EminBridge.readMessageComing(JSON.stringify(msg));
+        }
+
+        // 模拟读取未付款订单消息
+        function readDelivery(){
+           console.log("js readDelivery");
+            var msg = {
+                templateid:1,
+                pageid:'reddot.html',
+                itemid:'delivery',
+                status:'read'
+            };
+            EminBridge.readMessageComing(JSON.stringify(msg));
+        }
+
+        // 返回上一页
+        function back(){
+            EminBridge.lastWebPage();
+        }
+    </script>
+
+</html>
